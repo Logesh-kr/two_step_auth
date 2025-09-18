@@ -93,12 +93,21 @@ def verify():
         if otp_entered == otp_data['otp']:
             otp_store.pop(email, None)
             session['authenticated'] = True
-            return '✅ Login Successful!'
+            # ✅ Render the styled success page instead of plain text
+            return render_template('success.html')
         else:
             flash('Invalid OTP.')
             return redirect(url_for('verify'))
 
     return render_template('verify.html')
+
+
+@app.route('/home')
+def home_page():
+    if not session.get('authenticated'):
+        flash('Please log in first.')
+        return redirect(url_for('login'))
+    return 'Welcome to the Home Page!'
 
 
 if __name__ == '__main__':
